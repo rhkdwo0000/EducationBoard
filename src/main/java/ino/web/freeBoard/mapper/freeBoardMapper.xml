@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ino.web.freeBoard.mapper.FreeBoardMapper">
+
+	<select id="freeBoardGetList" resultType="int"> 
+		SELECT COUNT(*) FROM BOARD
+	</select>
+
+	<select id="searchBoardGetList" parameterType="map" resultType="freeBoardDto">
+		SELECT ORIGIN_NUM, NAME, TITLE, NEW_DAY FROM BOARD
+		WHERE ${category}
+		LIKE '%${searchText}%'
+		ORDER BY ORIGIN_NUM
+		DESC
+	</select>
+	
+	<select id="searchBoardGetListCount" parameterType="map" resultType="int">
+		SELECT COUNT(*) FROM BOARD
+		WHERE ${category}
+		LIKE '%${searchText}%'
+	</select>
+	
+	<select id="BoardGetListPaging" parameterType="map" resultType="freeBoardDto">
+		SELECT * FROM (
+		SELECT A.*, ROW_NUMBER() OVER(ORDER BY origin_num DESC) AS NUM
+		FROM BOARD A
+		)
+		WHERE NUM BETWEEN ${start} AND ${end}
+	</select>
+	
+	<select id="searchBoardGetListPaging" parameterType="map" resultType="freeBoardDto">
+		SELECT * FROM (
+		SELECT A.*, ROW_NUMBER() OVER(ORDER BY origin_num DESC) AS NUM
+		FROM BOARD A WHERE A.${category}
+		LIKE '%${searchText}%'
+		)
+		WHERE NUM BETWEEN ${start} AND ${end}
+	</select>
+
+	<insert id="freeBoardInsertPro" parameterType="freeBoardDto">
+		INSERT INTO
+		BOARD(ORIGIN_NUM, NAME, TITLE, CONTENT, NEW_DAY)
+		VALUES(
+		SEQUENCE.NEXTVAL, #{name}, #{title}, #{content} , sysdate)
+	</insert>
+
+	<select id="freeBoardDetailByNum" resultType="freeBoardDto"
+		parameterType="int">
+		SELECT ORIGIN_NUM, NAME, TITLE, CONTENT, NEW_DAY FROM
+		BOARD
+		WHERE ORIGIN_NUM=#{num}
+	</select>
+
+<!-- 	<select id="freeBoardNewNum" resultType="int"> -->
+<!-- 		SELECT MAX(ORIGIN_NUM) -->
+<!-- 		FROM BOARD -->
+<!-- 	</select> -->
+
+	<update id="freeBoardModify" parameterType="freeBoardDto">
+		UPDATE BOARD
+		SET TITLE
+		= #{title}
+		, CONTENT = #{content}
+		WHERE ORIGIN_NUM = #{origin_num}
+	</update>
+
+	<delete id="freeBoardDelete" parameterType="int">
+		DELETE FROM BOARD
+		WHERE ORIGIN_NUM
+		= #{num}
+	</delete>
+
+
+</mapper>
