@@ -5,10 +5,11 @@
 
 /* 게시글 등록함수 */
 function insertButton() {
-	
+
 	var formdate = $("#insert").serialize();
 
-	if ("" == $("#name").val() || "" == $("#title").val() || "" == $("#content").val()) {
+	if ("" == $("#name").val() || "" == $("#title").val()
+			|| "" == $("#content").val()) {
 		alert("이름,제목,내용모두 공백이없어야합니다")
 	} else {
 		var message = confirm("등록하시겠습니까")
@@ -57,10 +58,16 @@ function deleteCheck(num) {
 
 /* 검색시 유효성검사 함수 */
 function search() {
-	if ("" ==  $("#searchText").val() ) {
+	if ("" == $("#searchText").val()) {
 		alert("검색어를 입력해주세요")
 	} else {
 		location.href = "./main.ino?searchText=" + $("#searchText").val()
-				+ "&category=" + $("#searchCategory option:selected").val();
+				+ "&category=" + $("#searchCategory option:selected").val()
+				+ "&year=" + $("#yearSearch option:selected").val()
+				+ "&month=" + $("#monthSearch option:selected").val()
+				+ "&day=" + $("#daySearch option:selected").val();
+				
 	}
 }
+
+

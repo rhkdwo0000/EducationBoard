@@ -54,5 +54,4 @@ public class FreeBoardDto {
 		this.new_day = new_day;
 	}
 
-	
 }

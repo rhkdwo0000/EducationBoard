@@ -20,7 +20,8 @@
 	<select id="searchBoardGetListCount" parameterType="map" resultType="int">
 		SELECT COUNT(*) FROM BOARD
 		WHERE ${category}
-		LIKE '%${searchText}%'
+		LIKE '%${searchText}%' AND NEW_DAY BETWEEN TO_DATE('${date}','YYYY-MM-DD')AND 
+        TO_DATE('${date}','YYYY-MM-DD')+0.99999
 	</select>
 	
 	<select id="BoardGetListPaging" parameterType="map" resultType="freeBoardDto">
@@ -37,7 +38,8 @@
 		FROM BOARD A WHERE A.${category}
 		LIKE '%${searchText}%'
 		)
-		WHERE NUM BETWEEN ${start} AND ${end}
+		WHERE NUM BETWEEN ${start} AND ${end} AND NEW_DAY BETWEEN TO_DATE('${date}','YYYY-MM-DD')AND 
+        TO_DATE('${date}','YYYY-MM-DD')+0.99999
 	</select>
 
 	<insert id="freeBoardInsertPro" parameterType="freeBoardDto">
@@ -47,12 +49,49 @@
 		SEQUENCE.NEXTVAL, #{name}, #{title}, #{content} , sysdate)
 	</insert>
 
-	<select id="freeBoardDetailByNum" resultType="freeBoardDto"
-		parameterType="int">
+	<select id="freeBoardDetailByNum" resultType="freeBoardDto" parameterType="int">
 		SELECT ORIGIN_NUM, NAME, TITLE, CONTENT, NEW_DAY FROM
 		BOARD
 		WHERE ORIGIN_NUM=#{num}
 	</select>
+	
+	<select id="searchCategoryList" resultType="hashmap">
+		SELECT 
+		A.CODE,A.DETAIL_CODE,A.DETAIL_CODE_NAME,A.USE_YN,A.ORDER_SEQ,A.DETAIL_CODE_NAME_EN 
+		FROM DETAILTABLE A
+		JOIN MASTERTABLE B
+		ON A.CODE = B.CODE
+		WHERE B.CODE_NAME = '검색조건' and A.USE_YN = 'Y'
+	</select>
+	
+	<select id="yearSearchList" resultType="hashmap">
+		SELECT 
+   		A.DETAIL_CODE_NAME AS YEAR
+		FROM DETAILTABLE A,
+  		MASTERTABLE B
+		WHERE A.CODE = B.CODE and B.CODE_NAME = '년도' and A.USE_YN = 'Y'
+	</select>
+	
+	<select id="monthSearchList" resultType="hashmap">
+		SELECT 
+		A.DETAIL_CODE_NAME AS MONTH
+		FROM DETAILTABLE A,
+		MASTERTABLE B
+		WHERE A.CODE = B.CODE and B.CODE_NAME = '월' and A.USE_YN = 'Y'
+	</select>
+	
+	<select id="daySearchList" resultType="hashmap">
+		SELECT 
+		A.DETAIL_CODE_NAME AS DAY
+		FROM DETAILTABLE A,
+		MASTERTABLE B
+		WHERE A.CODE = B.CODE and B.CODE_NAME = '일' and A.USE_YN = 'Y'
+	</select>
+	
+	
+	
+	
+	
 
 <!-- 	<select id="freeBoardNewNum" resultType="int"> -->
 <!-- 		SELECT MAX(ORIGIN_NUM) -->

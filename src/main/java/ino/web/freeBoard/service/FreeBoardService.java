@@ -58,4 +58,27 @@ public class FreeBoardService {
 		sqlSessionTemplate.delete("freeBoardDelete", num);
 	}
 	
+	
+	/*검색조건 리스트*/
+	public List searchCategoryList() {
+		return sqlSessionTemplate.selectList("searchCategoryList");
+	}
+	
+	
+	/*연도 리스트*/
+	public List yearList() {
+		return sqlSessionTemplate.selectList("yearSearchList");
+	}
+	
+	/*달 리스트*/
+	public List monthList() {
+		return sqlSessionTemplate.selectList("monthSearchList");
+	}
+	
+	/*일 리스트*/
+	public List dayList() {
+		return sqlSessionTemplate.selectList("daySearchList");
+	}
+	
+	
 }

@@ -13,4 +13,3 @@
 <a href="<%=request.getContextPath() %>/main.ino">메인페이지</a>
 </body>
 </html>
-
